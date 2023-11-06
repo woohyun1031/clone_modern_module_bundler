@@ -1,0 +1,7 @@
+{
+  "name": "wh_module_bundler",
+  "version": "1.0.0",
+  "description": "clone modern module bundler",
+  "author": "Woohyun",
+  "license": "ISC"
+}
