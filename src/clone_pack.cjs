@@ -12,17 +12,20 @@ function getAsset(path) {
   });
   const dependencies = [];
   const id = ID++;
-
   traverse(ast, {
-    enter(path) {
+    enter: (path) => {
       if (path.node.type === "ImportDeclaration") {
         dependencies.push(path.node.source.value);
       }
     },
   });
+  const { code } = transformFromAst(ast, null, {
+    presets: ["env"],
+  });
 
   return {
     id,
+    code,
     filename: path,
     dependencies,
   };

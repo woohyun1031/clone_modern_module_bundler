@@ -12,4 +12,19 @@
    - 노드를 탐색하고 업데이트하기 위해 babylon.parse와 함께 사용
    - AST를 순회하며 ImportDeclaration type을 찾아 value를 반환한다.
    - https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-traverse
-3.
+   - https://babeljs.io/docs/babel-types#importdeclaration: importdeclaration뿐만이 아닌 AST 노드의 타입들을 확인할 수 있다.
+3. transformFromAst 메서드로 "env"프리셋을 사용하여 ECMAScript 버전을 자동으로 감지하여 CommonJS 기반의 코드로 변환한다.
+
+   ```
+   "use strict";
+
+   var _message = require("./message.js");
+
+   var _message2 = _interopRequireDefault(_message);
+
+   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+   console.log(_message2.default);
+   ```
+
+4.
