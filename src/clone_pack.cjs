@@ -2,6 +2,7 @@ const fs = require("fs");
 const babylon = require("babylon");
 const traverse = require("babel-traverse").default;
 const { transformFromAst } = require("babel-core");
+const path = require("path");
 
 let ID = 0;
 
@@ -31,9 +32,35 @@ function getAsset(path) {
   };
 }
 
-function createGraph(path) {
-  const asset = getAsset(path);
-  console.log(asset);
+function createGraph(entryPath) {
+  const entryAsset = getAsset(entryPath);
+  const queue = [entryAsset];
+
+  for (asset of queue) {
+    asset.mapping = {};
+    const dirname = path.dirname(asset.filename);
+    asset.dependencies.forEach((relativePath) => {
+      const absolutePath = path.join(dirname, relativePath); // ./example ./message.js
+      const childAsset = getAsset(absolutePath);
+      asset.mapping[relativePath] = childAsset.id;
+      queue.push(childAsset);
+    });
+  }
+  return queue;
+}
+
+function bundle(dependencyGraph) {
+  let bundleString = "";
+  dependencyGraph.forEach((module) => {
+    bundleString += `${module.id}: [
+      function (require, module, exports) {
+        ${module.code}
+      },
+      ${JSON.stringify(module.mapping)}
+    ]`;
+  });
+  console.log(bundleString);
 }
 
 const graph = createGraph("./example/entry.js");
+bundle(graph);

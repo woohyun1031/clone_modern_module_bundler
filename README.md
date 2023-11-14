@@ -27,4 +27,10 @@
    console.log(_message2.default);
    ```
 
-4.
+4. 이제 entry를 기점으로 그래프를 순회한다.
+
+   - entry부터 dependencies를 조회하며 각 모듈과 해당 모듈에 의존하고 있는 모듈간의 관계(mapping)을 정의한다. 이렇게 queue에는 관계(mapping)이 배열로 종속성 graph를 완성한다.
+
+5. 하나로 합치는 번들 과정을 진행한다.
+
+- 각 모듈의 스코프를 지정하기 위해 모듈을 CommonJS의 require, module, exports를 사용할 수 있는 함수로 감싸준다.
