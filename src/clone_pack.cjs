@@ -35,7 +35,6 @@ function getAsset(path) {
 function createGraph(entryPath) {
   const entryAsset = getAsset(entryPath);
   const queue = [entryAsset];
-
   for (asset of queue) {
     asset.mapping = {};
     const dirname = path.dirname(asset.filename);
@@ -57,10 +56,27 @@ function bundle(dependencyGraph) {
         ${module.code}
       },
       ${JSON.stringify(module.mapping)}
-    ]`;
+    ],`;
   });
-  console.log(bundleString);
+  const result = `
+  (function(modules, entryId) {
+    function require(id) {
+      const [fn, mapping] = modules[id];      
+      function localRequire(path) {
+        return require(mapping[path]);
+      }
+      const module = { exports : {} };
+      fn(localRequire, module, module.exports);      
+      return module.exports;
+    }
+    require(entryId);
+  })({${bundleString}}, ${dependencyGraph?.[0]?.id})
+`;
+  return result;
 }
 
 const graph = createGraph("./example/entry.js");
-bundle(graph);
+const result = bundle(graph);
+eval(result); // hello world!
+
+// 번들의 자세한 코드는 src/modules.js 파일 참고
