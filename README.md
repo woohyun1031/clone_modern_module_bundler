@@ -32,5 +32,9 @@
    - entry부터 dependencies를 조회하며 각 모듈과 해당 모듈에 의존하고 있는 모듈간의 관계(mapping)을 정의한다. 이렇게 queue에는 관계(mapping)이 배열로 종속성 graph를 완성한다.
 
 5. 하나로 합치는 번들 과정을 진행한다.
-
-- 각 모듈의 스코프를 지정하기 위해 모듈을 CommonJS의 require, module, exports를 사용할 수 있는 함수로 감싸준다.
+   - 각 모듈의 스코프를 지정하기 위해 모듈을 CommonJS의 require, module, exports를 사용할 수 있는 함수로 감싸주며 bundle string 형태로 이어준다. "{0:[], 1:[], 2:[], ...}"
+   - 최종 번들 된 객체를 실행시키기위해 IIFE 함수를 만들어 실행할 수 있는 환경을 만들어준다. 브라우저에선 CommonJS의 require, module, exports를 사용할 수 없기 때문에 직접 구현해준다.  
+     `var _message = require("./message.js");`와 같은 경우 직접 구현한 require를 통해 mapping에서 `./message.js` key값과 일치하는 id 값을 찾아 해당 id값에 해당하는 모듈의 종속성을 찾기 위해 재귀적으로 require를 실행한다  
+     require(localRequire): 모듈의 mapping에 존재하는 경로 key를 찾아 해당 id 모듈을 분석 후 module의 exports를 반환한다.  
+     export: CommonJS로 컴파일된 코드의 exports를 사용하기위해 module의 exports 객체를 만들어준다.  
+     번들된 코드의 보다 자세한 내용은 `src/modules.js`를 참고한다.
