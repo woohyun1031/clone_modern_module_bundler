@@ -1,5 +1,6 @@
 const fs = require("fs");
 const babylon = require("babylon");
+const babel = require("@babel/parser");
 const traverse = require("babel-traverse").default;
 const { transformFromAst } = require("babel-core");
 const path = require("path");
@@ -8,7 +9,7 @@ let ID = 0;
 
 function getAsset(path) {
   const content = fs.readFileSync(path, "utf-8");
-  const ast = babylon.parse(content, {
+  const ast = babel.parse(content, {
     sourceType: "module",
   });
   const dependencies = [];
