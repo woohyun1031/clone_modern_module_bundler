@@ -1,5 +1,4 @@
 const fs = require("fs");
-const babylon = require("babylon");
 const babel = require("@babel/parser");
 const traverse = require("babel-traverse").default;
 const { transformFromAst } = require("babel-core");
