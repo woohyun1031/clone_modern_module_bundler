@@ -59,22 +59,23 @@ function bundle(dependencyGraph) {
     ],`;
   });
   const result = `
-  (function(modules, entryId) {
-    function require(id) {
-      const [fn, mapping] = modules[id];      
-      function localRequire(path) {
-        return require(mapping[path]);
+    function modules_start(modules, entryId) {
+      function require(id) {
+        const [fn, mapping] = modules[id];      
+        function localRequire(path) {
+          return require(mapping[path]);
+        }
+        const module = { exports : {} };
+        fn(localRequire, module, module.exports);      
+        return module.exports;
       }
-      const module = { exports : {} };
-      fn(localRequire, module, module.exports);      
-      return module.exports;
+      require(entryId);
     }
-    require(entryId);
-  })({${bundleString}}, ${dependencyGraph?.[0]?.id})
-`;
+    modules_start({${bundleString}}, ${dependencyGraph?.[0]?.id})
+    `;
   return result;
 }
-
+// ({${bundleString}}, ${dependencyGraph?.[0]?.id})
 const graph = createGraph("./example/entry.js");
 const result = bundle(graph);
 eval(result); // hello world!
