@@ -1,3 +1,4 @@
-import {name} from './name.js';
+import { changeName } from "./name.js";
 
-export default `hello ${name}!`;
+const name = changeName("message");
+export default `hello ${name}!1`;

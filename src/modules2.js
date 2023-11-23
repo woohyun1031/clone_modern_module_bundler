@@ -46,20 +46,9 @@ const modules = {
 
       exports.default = "hello " + _name.name + "!2";
     },
-    { "./name.js": 4 },
+    { "./name.js": 3 },
   ],
   3: [
-    function (require, module, exports) {
-      "use strict";
-
-      Object.defineProperty(exports, "__esModule", {
-        value: true,
-      });
-      var name = (exports.name = "world");
-    },
-    {},
-  ],
-  4: [
     function (require, module, exports) {
       "use strict";
 
